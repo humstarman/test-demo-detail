@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-
 :(){
   FILES=$(find /var/env -name "*.env")
 
@@ -12,6 +11,22 @@ set -e
     done
   fi
 };:
+FILE=info.env
+if [ -f ./$FILE ]; then
+  source ./$FILE
+else
+  echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [ERROR] - no environment file found!" 
+  echo " - exit!"
+  sleep 3
+  exit 1
+fi
+function getScript(){
+  URL=$1
+  SCRIPT=$2
+  curl -s -o ./$SCRIPT $URL/$SCRIPT
+  chmod +x ./$SCRIPT
+}
+getScript $URL docker-config.sh
 
 # 1 download and install docker 
 echo "$(date -d today +'%Y-%m-%d %H:%M:%S') - [INFO] - download docker ... "

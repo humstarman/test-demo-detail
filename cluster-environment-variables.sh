@@ -9,6 +9,18 @@ else
   sleep 3
   exit 1 
 fi
+function getScript(){
+  URL=$1
+  SCRIPT=$2
+  curl -s -o ./$SCRIPT $URL/$SCRIPT
+  chmod +x ./$SCRIPT
+}
+getScript $URL deal-env.sh
+getScript $URL mk-env-conf.sh
+getScript $URL put-this-ip.sh
+if $NODE_EXISTENCE; then
+  getScript $URL put-node-ip.sh
+fi
 
 #MASTER=$(sed s/","/" "/g ./master.csv)
 NET_ID=$(cat ./master.csv)
